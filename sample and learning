@@ -1,5 +1,8 @@
 https://www.zhihu.com/question/20899988
 
+https://doc.scrapy.org/en/latest/intro/tutorial.html
+
+
 import OS
 import requests
 from lxml import html
