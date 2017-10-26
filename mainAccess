@@ -1,0 +1,15 @@
+import OS
+import requests
+from lxml import html
+
+def save(text, filename='temp', path='download'):
+  fpath=os.path.join(path, filename)
+  with open(fpath, 'w') as f:
+    f.write(text)
+    
+    
+def crawler0(url0):
+  resp = requests.get(url0)
+  page = resp.content
+  root = html.fromstring(page)
+  
