@@ -1,4 +1,4 @@
-https://www.leiphone.com/
+url = https://www.leiphone.com/
 
 https://www.zhihu.com/question/20899988
 
@@ -10,8 +10,30 @@ http://cuiqingcai.com/1052.html
 
 http://www.cnblogs.com/Albert-Lee/p/6226699.html
 
+===================================
 http://blog.csdn.net/u012705410/article/details/47708031
+# coding = UTF-8
+# 爬取李东风PDF文档,网址：http://www.math.pku.edu.cn/teachers/lidf/docs/textrick/index.htm
 
+import urllib2
+import re
+import os
+
+# open the url and read
+def getHtml(url):
+    page = urllib2.urlopen(url)
+    html = page.read()
+    page.close()
+    return html
+
+# compile the regular expressions and find
+# all stuff we need
+def getUrl(html):
+    reg = r'(?:href|HREF)="?((?:http://)?.+?\.pdf)'
+    url_re = re.compile(reg)
+    url_lst = re.findall(url_re,html)
+    return(url_lst)
+==================================
 
 import OS
 import requests
