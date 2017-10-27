@@ -1,11 +1,7 @@
-===target web sites===
-"http://www.leiphone.com"
-
-
-
-
-
-
-===key search words===
+http://www.leiphone.com
+http://www.baidu.com
+************************
 3D
 三维
+Solowheel
+创业天府
