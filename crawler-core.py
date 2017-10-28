@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -7,33 +9,39 @@ import webbrowser
 
 url_list = []
 key_word_list = []
-data_file = open("data.txt", "r")
+
+#note: if uisng r, return normal string; if using rb, return binary.  It will impact the following string processing.
+#note: if there is Chinese (non-English) characters in data.txt, we need explicitly assign encoding = utf-8 here
+#note: for each line, when we save it in the list, we'd better remove the line return cahracter - \n, otherwise it may cause trouble later
+data_file = open("data.txt", "r", encoding = "UTF-8")
 
 break_line = 0
 
+#please check the format used in data.txt
 for line in data_file:
+	print (line[0])
 	if(break_line ==0 and line[0] == "*"):
 		break_line = 1
 
 	if (break_line == 0 and line[0] != "*"):
-		url_list.append(line)
+		url_list.append(line.strip("\n"))
 	
 	if (break_line == 1 and line[0] != "*"):
-		key_word_list.append(line)
+		key_word_list.append(line.strip("\n"))
 
-	
+data_file.close()
 
 
 
 for url in url_list:
-	print(url)
-	page = requests.get(re.compile(url))
+	print (url)
+	page = requests.get(url)
 	soup = BeautifulSoup(page.text,"lxml")
-	#print(soup)
+	
 	for key_word in key_word_list:
 		print(key_word)
 		find = soup.find_all('a', text=re.compile(key_word))
-		print(find)
+		#print(find)
 		for link in find:
 			webbrowser.open_new_tab(link.get('href'))
 
