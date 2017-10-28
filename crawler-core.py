@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
 
+# requests is a python lib used for http level data communication
 import requests
 import re
+
+#BeautifulSoup is a good html parser to help cawler to get wanted data in a easy way
 from bs4 import BeautifulSoup
 
 import urllib
