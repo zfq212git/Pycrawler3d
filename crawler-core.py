@@ -10,6 +10,9 @@ from bs4 import BeautifulSoup
 import urllib
 import webbrowser
 
+import excel_processing
+
+
 url_list = []
 key_word_list = []
 
@@ -22,7 +25,7 @@ break_line = 0
 
 #please check the format used in data.txt
 for line in data_file:
-	print (line[0])
+	#print (line[0])
 	if(break_line ==0 and line[0] == "*"):
 		break_line = 1
 
@@ -37,14 +40,15 @@ data_file.close()
 
 
 for url in url_list:
-	print (url)
+	#print (url)
 	page = requests.get(url)
 	soup = BeautifulSoup(page.text,"lxml")
 	
 	for key_word in key_word_list:
-		print(key_word)
+		#print(key_word)
 		find = soup.find_all('a', text=re.compile(key_word))
 		#print(find)
 		for link in find:
-			webbrowser.open_new_tab(link.get('href'))
+			#webbrowser.open_new_tab(link.get('href'))
+			excel_processing.archive_in_excel("archive1.xlsx", key_word, link.get('href')+"\n")
 
