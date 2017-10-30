@@ -48,7 +48,17 @@ for url in url_list:
 		#print(key_word)
 		find = soup.find_all('a', text=re.compile(key_word))
 		#print(find)
+		
+		data = xlrd.open_workbook(file)
+		sheet1 = data.sheet_by_name(u'sheet1')
+		sheet2 = data.sheet_by_name(u'sheet2')
+		start_row = int(sheet2.cell(1,0).value)
+		data_1=load_workbook("archive1.xlsx")
 		for link in find:
 			#webbrowser.open_new_tab(link.get('href'))
-			excel_processing.archive_in_excel("archive1.xlsx", key_word, link.get('href')+"\n")
+			
+			excel_processing.archive_in_excel(start_row, key_word, link.get('href'))
+			start_row=start_row+3
+			
+		data_1.save(file)
 
