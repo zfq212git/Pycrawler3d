@@ -10,6 +10,10 @@ from bs4 import BeautifulSoup
 import urllib
 import webbrowser
 
+import xlrd
+import xlwt
+from openpyxl import load_workbook
+
 import excel_processing
 
 
@@ -38,27 +42,29 @@ for line in data_file:
 data_file.close()
 
 
+#try to write the crawlered data in a excel file.  We use openpyxl as 3rd party but did not use xlrd/xlwt, becasue only openpyxl
+#can handle editing existing excel document
+dataX=load_workbook("archive1.xlsx")
+sheetX1=dataX.get_sheet_by_name('sheet1')
+sheetX2=dataX.get_sheet_by_name('sheet2')
+starting_row_number = int(sheetX2['A2'].value)
 
 for url in url_list:
 	#print (url)
 	page = requests.get(url)
 	soup = BeautifulSoup(page.text,"lxml")
-	
+
 	for key_word in key_word_list:
 		#print(key_word)
 		find = soup.find_all('a', text=re.compile(key_word))
 		#print(find)
 		
-		data = xlrd.open_workbook(file)
-		sheet1 = data.sheet_by_name(u'sheet1')
-		sheet2 = data.sheet_by_name(u'sheet2')
-		start_row = int(sheet2.cell(1,0).value)
-		data_1=load_workbook("archive1.xlsx")
 		for link in find:
 			#webbrowser.open_new_tab(link.get('href'))
-			
-			excel_processing.archive_in_excel(start_row, key_word, link.get('href'))
-			start_row=start_row+3
-			
-		data_1.save(file)
+			sheetX1['A'+str(starting_row_number+1)] = key_word
+			sheetX1['A'+str(starting_row_number+2)] = link.get('href')
+			starting_row_number=starting_row_number+3
+	
+sheetX2['A2']=starting_row_number	
+dataX.save("archive1.xlsx")
 
