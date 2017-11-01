@@ -45,9 +45,12 @@ data_file.close()
 #try to write the crawlered data in a excel file.  We use openpyxl as 3rd party but did not use xlrd/xlwt, becasue only openpyxl
 #can handle editing existing excel document
 dataX=load_workbook("archive1.xlsx")
-sheetX1=dataX.get_sheet_by_name('sheet1')
-sheetX2=dataX.get_sheet_by_name('sheet2')
-starting_row_number = int(sheetX2['A2'].value)
+sheetFor3D=dataX.get_sheet_by_name('3D')
+sheetForOther=dataX.get_sheet_by_name('other')
+sheetX=dataX.get_sheet_by_name('Sheet1')
+
+starting_row_number_3D = int(sheetX['A1'].value)
+starting_row_number_Other = int(sheetX['B1'].value)
 
 for url in url_list:
 	#print (url)
@@ -59,12 +62,19 @@ for url in url_list:
 		find = soup.find_all('a', text=re.compile(key_word))
 		#print(find)
 		
-		for link in find:
+		if (key_word == '3D' or key_word == "三维"):
+			for link in find:
 			#webbrowser.open_new_tab(link.get('href'))
-			sheetX1['A'+str(starting_row_number+1)] = key_word
-			sheetX1['A'+str(starting_row_number+2)] = link.get('href')
-			starting_row_number=starting_row_number+3
+				sheetFor3D['A'+str(starting_row_number_3D+1)] = key_word
+				sheetFor3D['A'+str(starting_row_number_3D+2)] = link.get('href')
+				starting_row_number_3D=starting_row_number_3D+3
+		else:
+			for link in find:
+				sheetForOther['A'+str(starting_row_number_Other+1)] = key_word
+				sheetForOther['A'+str(starting_row_number_Other+2)] = link.get('href')
+				starting_row_number_Other=starting_row_number_Other+3
 	
-sheetX2['A2']=starting_row_number	
+sheetX['A1']=starting_row_number_3D
+sheetX['B1']=starting_row_number_Other	
 dataX.save("archive1.xlsx")
 
