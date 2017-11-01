@@ -47,7 +47,7 @@ data_file.close()
 dataX=load_workbook("archive1.xlsx")
 sheetFor3D=dataX.get_sheet_by_name('3D')
 sheetForOther=dataX.get_sheet_by_name('other')
-sheetX=dataX.get_sheet_by_name('Sheet1')
+sheetX=dataX.get_sheet_by_name('Sheet3')
 
 starting_row_number_3D = int(sheetX['A1'].value)
 starting_row_number_Other = int(sheetX['B1'].value)
@@ -60,19 +60,31 @@ for url in url_list:
 	for key_word in key_word_list:
 		#print(key_word)
 		find = soup.find_all('a', text=re.compile(key_word))
-		#print(find)
-		
-		if (key_word == '3D' or key_word == "三维"):
-			for link in find:
-			#webbrowser.open_new_tab(link.get('href'))
-				sheetFor3D['A'+str(starting_row_number_3D+1)] = key_word
-				sheetFor3D['A'+str(starting_row_number_3D+2)] = link.get('href')
-				starting_row_number_3D=starting_row_number_3D+3
-		else:
-			for link in find:
-				sheetForOther['A'+str(starting_row_number_Other+1)] = key_word
-				sheetForOther['A'+str(starting_row_number_Other+2)] = link.get('href')
-				starting_row_number_Other=starting_row_number_Other+3
+		#print(find)	
+		for link in find:		
+
+			index0 = link.get('href')
+			indexLen=int(len(index0))
+			print(indexLen)
+			index = index0[indexLen-10:indexLen-6] + '\n'
+
+			index_file = open('index.txt','r')
+			index_list = index_file.read()
+			if index not in index_list:
+				index_file.close()
+				if (key_word == '3D' or key_word == "三维"):
+					#webbrowser.open_new_tab(link.get('href'))
+					sheetFor3D['A'+str(starting_row_number_3D+1)] = key_word
+					sheetFor3D['A'+str(starting_row_number_3D+2)] = index0
+					starting_row_number_3D=starting_row_number_3D+3
+				else:
+					sheetForOther['A'+str(starting_row_number_Other+1)] = key_word
+					sheetForOther['A'+str(starting_row_number_Other+2)] = index0
+					starting_row_number_Other=starting_row_number_Other+3
+				index_file = open('index.txt','w')
+				index_file.write(index+'\n')
+				index_file.close()			
+
 	
 sheetX['A1']=starting_row_number_3D
 sheetX['B1']=starting_row_number_Other	
