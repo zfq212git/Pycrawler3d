@@ -68,6 +68,9 @@ for url in url_list:
 			print(indexLen)
 			index = index0[indexLen-10:indexLen-6] + '\n'
 
+			print(index0)
+			print(index)
+
 			index_file = open('index.txt','r')
 			index_list = index_file.read()
 			if index not in index_list:
@@ -81,7 +84,7 @@ for url in url_list:
 					sheetForOther['A'+str(starting_row_number_Other+1)] = key_word
 					sheetForOther['A'+str(starting_row_number_Other+2)] = index0
 					starting_row_number_Other=starting_row_number_Other+3
-				index_file = open('index.txt','w')
+				index_file = open('index.txt','a')
 				index_file.write(index+'\n')
 				index_file.close()			
 
